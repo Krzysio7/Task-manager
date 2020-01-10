@@ -46,9 +46,10 @@ class ActionButton extends React.Component<ListType> {
   handleAddCard = () => {
     const { listID, addCard, lastIndex } = this.props;
     const { text } = this.state;
+    const date: Date = new Date();
 
     if (text && typeof listID === 'string') {
-      addCard(listID, text, lastIndex);
+      addCard(listID, text, lastIndex, date);
       this.setState({ text: '' });
     }
     return;
@@ -87,12 +88,6 @@ class ActionButton extends React.Component<ListType> {
           <Icon>add</Icon>
           <p>{buttonText}</p>
         </div>
-        {!list &&
-          <Icon style={{
-          display: 'flex',
-          marginLeft: 'auto',
-          backgroundColor: 'red'
-        }} onClick={this.deleteList}>close</Icon>}
       </div>
     );
   }

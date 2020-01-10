@@ -1,7 +1,7 @@
 import { ListActions } from ".";
 import { listsRef } from "../config/firebase";
 
-export const addCard = (listID: number, text: any, lastIndex: number) => async (dispatch: any) => {
+export const addCard = (listID: number, text: any, lastIndex: number, date: Date) => async (dispatch: any) => {
 
   if (text === "") {
     alert("Card cannot be empty");
@@ -17,7 +17,8 @@ export const addCard = (listID: number, text: any, lastIndex: number) => async (
         [newCardKey]: {
           listKey: listID,
           cardName: text,
-          index: lastIndex
+          index: lastIndex,
+          date: date
         }
       });
 
