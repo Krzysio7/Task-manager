@@ -1,11 +1,12 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { CardObject } from '../reducers/listsReducer';
+import { UserObject } from '../reducers/usersReducer'
 import ActionButton from './ActionButton';
 import TrelloCard from './TrelloCard';
 
 
-const TrelloList = ({ listID, title, cards }: { listID: number, title: string, cards: Array<CardObject> }) => {
+const TrelloList = ({ listID, title, cards, users }: { listID: number, title: string, cards: Array<CardObject>, users: UserObject[]}) => {
   return (
     <Droppable droppableId={String(listID)}>
       {(provided: any) => (
@@ -18,7 +19,8 @@ const TrelloList = ({ listID, title, cards }: { listID: number, title: string, c
               index={index}
               text={card.text}
               id={card.id}
-              listID={listID} />
+              listID={listID}
+              users={users}/>
           )}
         
           {provided.placeholder}

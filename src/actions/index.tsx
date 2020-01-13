@@ -7,5 +7,10 @@ export enum ListActions {
   DELETE_LIST
 }
 
+export enum UsersActions { 
+  FETCH_USERS,
+}
+
 export * from './listActions';
 export * from './cardsActions';
+export * from './usersActions';

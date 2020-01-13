@@ -3,8 +3,9 @@ import { TrelloList } from '../components';
 import React from 'react';
 import ActionButton from "../components/ActionButton";
 import { ListObject } from '../reducers/listsReducer';
+import { UserObject } from '../reducers/usersReducer';
 import { connect } from "react-redux";
-import { fetchData, sort, updateCardsIndexes } from '../actions';
+import { fetchData, sort, updateCardsIndexes, fetchUsers } from '../actions';
 import { withRouter } from "react-router-dom";
 
 interface ListProps {
@@ -13,15 +14,17 @@ interface ListProps {
   fetchData: any;
   sort: any;
   updateCardsIndexes: any;
-
+  fetchUsers: any;
+  users:UserObject[];
 }
 
 class TaskList extends React.Component<ListProps>{ 
 
   componentDidMount() {
 
-    const { fetchData } = this.props;
+    const { fetchData, fetchUsers } = this.props;
     fetchData();
+    fetchUsers();
   }
 
   onDragEnd = (result: any) => {
@@ -44,10 +47,8 @@ class TaskList extends React.Component<ListProps>{
     updateCardsIndexes(lists, source.droppableId);
 
   }
-
-  
   render() {
-    const { lists } = this.props;
+    const { lists, users } = this.props;
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
           {/* <h2>Trello Clone</h2> */}
@@ -57,7 +58,8 @@ class TaskList extends React.Component<ListProps>{
                 listID={list.id}
                 key={list.id}
                 title={list.title}
-                cards={list.cards} />
+                cards={list.cards}
+                users={users}/>
             )}
             <ActionButton list={true} ></ActionButton>
           </div>
@@ -68,6 +70,7 @@ class TaskList extends React.Component<ListProps>{
 }
 const mapStateToProps = (state: ListProps) => ({
   lists: state.lists,
+  users: state.users,
 });
 
 const styles = {
@@ -79,4 +82,4 @@ const styles = {
     marginLeft:20
   }
 }
-export default withRouter(connect(mapStateToProps, { fetchData, sort, updateCardsIndexes })(TaskList) as any);
+export default withRouter(connect(mapStateToProps, { fetchData, fetchUsers, sort, updateCardsIndexes })(TaskList) as any);

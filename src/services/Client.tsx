@@ -12,7 +12,7 @@ class Client {
 
     try {
       let result = await Client.getAxios().get(requestUrl);
-      return { status: true, data: result.data.data }
+      return { status: true, data: result.data }
     } catch (error) {
       return { status: false, data: error.response }
     }
