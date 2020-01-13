@@ -2,11 +2,11 @@ import { Card, CardContent, Icon, Typography } from "@material-ui/core";
 import React from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
-import { deleteCard } from '../actions';
+import { deleteCard, updateCardAssignedUser, getUserById } from '../actions';
 import styles from './TrelloCard.module.css';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+import { MenuItem } from '@material-ui/core';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -19,6 +19,9 @@ interface CardProps {
   deleteCard?: any;
   listID: number;
   users: UserObject[];
+  updateCardAssignedUser: any;
+  getUserById: any;
+  userId: number;
 }
 
 class TrelloCard extends React.Component<CardProps> {
@@ -28,20 +31,30 @@ class TrelloCard extends React.Component<CardProps> {
     userAssigned: ""
   }
 
-  private inputRef: any;
+  async componentDidMount() {
+    const { getUserById, userId, users } = this.props;
+    try {
+      let user: UserObject = await getUserById(userId, users);
+      this.setState({ userAssigned: user.firstName + " " + user.lastName });
+    } catch{
+
+    }
+  }
 
   deleteCard = (id: number, listID: number) => {
     const { deleteCard } = this.props;
-    deleteCard(id, listID)
-
+    deleteCard(id, listID);
   }
 
   handleClick = () => {
     this.setState({ editModeEnabled: !this.state.editModeEnabled });
   }
-  
-  handleChangeAssignedUser = (event: any) => { 
-    this.setState({userAssigned: event.target.value})
+
+  handleChangeAssignedUser = (event: any, child: any) => {
+    const { updateCardAssignedUser, id } = this.props;
+    this.setState({ userAssigned: event.target.value }, () => {
+      updateCardAssignedUser(id, child.key);
+    });
   }
 
   render() {
@@ -64,10 +77,11 @@ class TrelloCard extends React.Component<CardProps> {
 
                     <textarea value={this.props.text} disabled={!this.state.editModeEnabled}
                       className={styles.textareaDescription}
-                      style={{ pointerEvents: this.state.editModeEnabled ? 'auto' : 'none' }} />
-                    <a href="/usercard">{this.state.userAssigned}</a>
+                      style={{ pointerEvents: this.state.editModeEnabled ? 'auto' : 'none' }}
+                    />
+                    Assigned: <a href="/usercard"> {this.state.userAssigned} </a>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                     <Icon style={{ cursor: 'pointer' }} onClick={this.handleClick}>edit</Icon>
                     <FormControl >
                       <Select onChange={this.handleChangeAssignedUser} displayEmpty>
@@ -76,7 +90,7 @@ class TrelloCard extends React.Component<CardProps> {
                         </MenuItem>
                         {users.map((user, index) => {
                           if (user.jobTitle) {
-                            return <MenuItem  key={user.id} value={user.firstName + " " + user.lastName}> {user.firstName} {user.lastName} </MenuItem>
+                            return <MenuItem itemProp={user.id + ""} key={user.id} value={user.firstName + " " + user.lastName}> {user.firstName} {user.lastName} </MenuItem>
                           }
                         }
                         )}
@@ -100,4 +114,4 @@ class TrelloCard extends React.Component<CardProps> {
 
 
 
-export default connect(null, { deleteCard })(TrelloCard)
+export default connect(null, { deleteCard, updateCardAssignedUser, getUserById })(TrelloCard)

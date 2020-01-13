@@ -4,6 +4,7 @@ export interface CardObject {
   id: number;
   text: string;
   index: number;
+  userId: number;
 }
 export interface ListObject {
   title: string;
@@ -75,35 +76,36 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
     case ListActions.FETCH_DATA:
       {
         const initialList: ListObject[] = [];
-        if (action.payload.lists) { 
-        action.payload.lists.map((list: any) => {
+        if (action.payload.lists) {
+          action.payload.lists.map((list: any) => {
 
-          let temp: ListObject;
-          temp = {
-            title: list.listName,
-            id: list.key,
-            cards: []
-          };
-          if (action.payload.cards) {
-            action.payload.cards.map((card: any) => {
-              if (card.listKey === list.key) {
+            let temp: ListObject;
+            temp = {
+              title: list.listName,
+              id: list.key,
+              cards: []
+            };
+            if (action.payload.cards) {
+              action.payload.cards.map((card: any) => {
+                if (card.listKey === list.key) {
 
-                let tempCard: CardObject;
-                tempCard = {
-                  id: card.key,
-                  text: card.cardName,
-                  index: card.index,
+                  let tempCard: CardObject;
+                  tempCard = {
+                    id: card.key,
+                    text: card.cardName,
+                    index: card.index,
+                    userId: card.userId
+                  }
+                  temp.cards.push(tempCard);
                 }
-                temp.cards.push(tempCard);
-              }
-            });
-            temp.cards.sort((a, b) => {
-              return a.index - b.index;
-            });
-          }
-          initialList.push(temp);
-        });
-      }
+              });
+              temp.cards.sort((a, b) => {
+                return a.index - b.index;
+              });
+            }
+            initialList.push(temp);
+          });
+        }
 
         return initialList;
       }

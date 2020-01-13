@@ -6,7 +6,7 @@ import ActionButton from './ActionButton';
 import TrelloCard from './TrelloCard';
 
 
-const TrelloList = ({ listID, title, cards, users }: { listID: number, title: string, cards: Array<CardObject>, users: UserObject[]}) => {
+const TrelloList = ({ listID, title, cards, users }: { listID: number, title: string, cards: Array<CardObject>, users: UserObject[] }) => {
   return (
     <Droppable droppableId={String(listID)}>
       {(provided: any) => (
@@ -20,9 +20,10 @@ const TrelloList = ({ listID, title, cards, users }: { listID: number, title: st
               text={card.text}
               id={card.id}
               listID={listID}
-              users={users}/>
+              users={users}
+              userId={card.userId} />
           )}
-        
+
           {provided.placeholder}
           <ActionButton listID={listID} lastIndex={cards ? cards.length : 0}></ActionButton>
         </div>

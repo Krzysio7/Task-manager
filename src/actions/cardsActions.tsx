@@ -18,7 +18,7 @@ export const addCard = (listID: number, text: any, lastIndex: number, date: Date
           listKey: listID,
           cardName: text,
           index: lastIndex,
-          date: date
+          date: date,
         }
       });
 
@@ -40,4 +40,12 @@ export const deleteCard = (id: number, listID: number) => async (dispatch: any) 
     payload: { id, listID }
   });
 
+}
+
+export const updateCardAssignedUser = (id: number, userId: number) => async () => {
+
+  listsRef
+    .child("cards")
+    .child(String(id))
+    .update({ userId: userId });
 }

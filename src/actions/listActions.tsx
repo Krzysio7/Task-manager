@@ -64,7 +64,8 @@ export const fetchData = () => async (dispatch: any) => {
           key: key,
           cardName: myCardFromDatabase[key].cardName,
           listKey: myCardFromDatabase[key].listKey,
-          index: myCardFromDatabase[key].index
+          index: myCardFromDatabase[key].index,
+          userId: myCardFromDatabase[key].userId,
         };
       });
 
@@ -115,26 +116,26 @@ export const updateCardsIndexes = (lists: ListObject[], id: number) => async () 
 }
 
 export const deleteList = (listID: number) => async (dispatch: any) => {
-  
-    listsRef
-      .child("lists")
-      .child(String(listID)).remove();
 
-    const query = listsRef
-      .child("cards").orderByChild('listKey').equalTo(listID);
+  listsRef
+    .child("lists")
+    .child(String(listID)).remove();
 
-    await query.once("value", (snapshot) => {
-      snapshot.forEach((childSnapshot) => {
-        if (childSnapshot.key) {
-          listsRef
-            .child("cards")
-            .child(childSnapshot.key).remove();
-        }
-      })
-    });
+  const query = listsRef
+    .child("cards").orderByChild('listKey').equalTo(listID);
 
-    dispatch({
-      type: ListActions.DELETE_LIST,
-      payload: listID,
-    });
+  await query.once("value", (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      if (childSnapshot.key) {
+        listsRef
+          .child("cards")
+          .child(childSnapshot.key).remove();
+      }
+    })
+  });
+
+  dispatch({
+    type: ListActions.DELETE_LIST,
+    payload: listID,
+  });
 } 
