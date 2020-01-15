@@ -1,0 +1,9 @@
+:local(.bold) {
+    color: blue;
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+:local(.userText) {
+    text-align: left;
+}

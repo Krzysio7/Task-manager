@@ -110,6 +110,7 @@ export const updateCardsIndexes = (lists: ListObject[], id: number) => async () 
           listKey: list.id,
           cardName: card.text,
           index: index,
+          userId: card.userId ? card.userId : null
         }
       });
   });

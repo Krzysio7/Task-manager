@@ -20,10 +20,11 @@ const usersReducer = (state: UserObject[] = [], action: any) => {
   switch (action.type) {
     case UsersActions.FETCH_USERS:
       {
-        let payload:UserObject[] = action.payload;
+        console.log(action.type)
+        let payload: UserObject[] = action.payload;
         const initialUsers: UserObject[] = [];
-        
-        payload.forEach((element : any) => {
+
+        payload.forEach((element: any) => {
           let tempUser: UserObject = {
             id: element.id,
             firstName: element.first_name,
@@ -38,7 +39,7 @@ const usersReducer = (state: UserObject[] = [], action: any) => {
             postalCode: element.postal_code,
             street: element.street,
             city: element.city
-          } 
+          }
           initialUsers.push(tempUser);
         });
         return initialUsers;

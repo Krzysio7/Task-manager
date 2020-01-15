@@ -15,13 +15,12 @@ interface ListProps {
   sort: any;
   updateCardsIndexes: any;
   fetchUsers: any;
-  users:UserObject[];
+  users: UserObject[];
 }
 
-class TaskList extends React.Component<ListProps>{ 
+class TaskList extends React.Component<ListProps>{
 
   componentDidMount() {
-
     const { fetchData, fetchUsers } = this.props;
     fetchData();
     fetchUsers();
@@ -51,19 +50,19 @@ class TaskList extends React.Component<ListProps>{
     const { lists, users } = this.props;
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
-          {/* <h2>Trello Clone</h2> */}
-          <div style={styles.listsContainer}>
-            {lists.map((list: any) =>
-              <TrelloList
-                listID={list.id}
-                key={list.id}
-                title={list.title}
-                cards={list.cards}
-                users={users}/>
-            )}
-            <ActionButton list={true} ></ActionButton>
-          </div>
-  
+        {/* <h2>Trello Clone</h2> */}
+        <div style={styles.listsContainer}>
+          {lists.map((list: any) =>
+            <TrelloList
+              listID={list.id}
+              key={list.id}
+              title={list.title}
+              cards={list.cards}
+              users={users} />
+          )}
+          <ActionButton list={true} ></ActionButton>
+        </div>
+
       </DragDropContext>
     );
   }
@@ -76,10 +75,10 @@ const mapStateToProps = (state: ListProps) => ({
 const styles = {
   listsContainer: {
     display: 'flex',
-    borderWidth:'10px',
+    borderWidth: '10px',
     marginRight: 8,
     marginTop: 20,
-    marginLeft:20
+    marginLeft: 20
   }
 }
 export default withRouter(connect(mapStateToProps, { fetchData, fetchUsers, sort, updateCardsIndexes })(TaskList) as any);

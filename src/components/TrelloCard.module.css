@@ -8,13 +8,16 @@
   height: auto;
   align-items: flex-start;
 }
+
 :local(.cardContainer) {
   margin-bottom: 8px;
   height: auto;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
-:local(.textareaDescription){
+
+:local(.textareaDescription) {
   resize: none;
   width: 100%;
   overflow: hidden;

@@ -18,7 +18,7 @@ export const addCard = (listID: number, text: any, lastIndex: number, date: Date
           listKey: listID,
           cardName: text,
           index: lastIndex,
-          date: date,
+          date: date.toString(),
         }
       });
 

@@ -17,7 +17,6 @@ export const fetchUsers = () => async (dispatch: any) => {
 }
 
 export const getUserById = (id: number, users: UserObject[]) => async (dispatch: any) => {
-  console.log(id)
 
   const user = await users.filter((item, index) => item.id == id);
   return user[0];
