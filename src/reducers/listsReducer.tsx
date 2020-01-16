@@ -12,6 +12,7 @@ export interface ListObject {
   title: string;
   id: number;
   cards: Array<CardObject>;
+  index: number;
 
 }
 
@@ -85,7 +86,8 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
             temp = {
               title: list.listName,
               id: list.key,
-              cards: []
+              cards: [],
+              index: list.index
             };
             if (action.payload.cards) {
               action.payload.cards.map((card: any) => {
@@ -107,9 +109,13 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
                 return a.index - b.index;
               });
             }
+
             initialList.push(temp);
           });
         }
+        initialList.sort((a, b) => {
+          return a.index - b.index;
+        });
 
         return initialList;
       }
@@ -121,10 +127,17 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
           droppableIdEnd,
           droppableIndexStart,
           droppableIndexEnd,
-          draggableId
+          draggableId,
+          type
         } = action.payload;
 
         const newState = [...state];
+
+        if (type === 'list') {
+          const list = newState.splice(droppableIndexStart, 1);
+          newState.splice(droppableIndexEnd, 0, ...list);
+          return newState;
+        }
 
         if (droppableIdStart === droppableIdEnd) {
           const list = state.find(list => droppableIdStart === list.id);
@@ -137,15 +150,14 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
         if (droppableIdStart !== droppableIdEnd) {
           // find the list where drag happened
           const listStart = state.find(list => droppableIdStart === list.id)
-          
-          if (listStart !== undefined) { 
+          const listEnd = state.find(list => droppableIdEnd === list.id);
+
+          if (listStart !== undefined) {
             const card = listStart.cards.splice(droppableIndexStart, 1);
 
-            const listEnd = state.find(list => droppableIdEnd === list.id);
-  
             listEnd?.cards.splice(droppableIndexEnd, 0, ...card);
           }
-         
+
         }
         return newState;
       }

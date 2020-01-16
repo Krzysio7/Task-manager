@@ -42,7 +42,8 @@ export const fetchData = () => async (dispatch: any) => {
       lists = Object.keys(snapshot.val()).map(key => {
         return {
           key: key,
-          listName: myListFromDatabase[key].listName
+          listName: myListFromDatabase[key].listName,
+          index: myListFromDatabase[key].index
         };
       });
 
@@ -86,7 +87,8 @@ export const sort = (
   droppableIdEnd: any,
   droppableIndexStart: any,
   droppableIndexEnd: any,
-  draggableId: any) => async (dispatch: any) => {
+  draggableId: any,
+  type: any) => async (dispatch: any) => {
 
     dispatch({
       type: ListActions.DRAG_HAPPENED,
@@ -95,29 +97,60 @@ export const sort = (
         droppableIdEnd,
         droppableIndexStart,
         droppableIndexEnd,
-        draggableId
+        draggableId,
+        type
       }
     });
   }
 
-export const updateCardsIndexes = (lists: ListObject[], id: number) => async () => {
+export const updateCardsIndexes = (lists: ListObject[], id: number[], type: string) => async () => {
 
-  const list = lists.find(list => id === list.id);
-  list?.cards.map((card: CardObject, index) => {
+  if (type == 'list') {
+
+
+
+    // id.forEach(element => {
+    console.log(id[0] + " : " + id[1]);
+    const sourceList = lists.find(list => list.index == id[0]);
+    const destinationList = lists.find(list => list.index == id[1]);
+
+    console.log(sourceList)
+    listsRef
+      .child("lists")
+      .child(String(sourceList?.id))
+      .update({ index: destinationList?.index });
 
     listsRef
-      .child("cards")
-      .update({
-        [card.id]: {
-          listKey: list.id,
-          cardName: card.text,
-          index: index,
-          userId: card.userId ? card.userId : null,
-          date: card.date ? card.date : null,
-          isFavourite: card.isFavourite ? card.isFavourite: null
-        }
+      .child("lists")
+      .child(String(destinationList?.id))
+      .update({ index: sourceList?.index })
+    // });
+
+  } else {
+
+    id.forEach(element => {
+
+
+      const list = lists.find(list => element === list.id);
+
+      list?.cards.map((card: CardObject, index) => {
+
+        listsRef
+          .child("cards")
+          .update({
+            [card.id]: {
+              listKey: list.id,
+              cardName: card.text,
+              index: index,
+              userId: card.userId ? card.userId : null,
+              date: card.date ? card.date : null,
+              isFavourite: card.isFavourite ? card.isFavourite : null
+            }
+          });
       });
-  });
+    });
+  }
+
 }
 
 export const deleteList = (listID: number) => async (dispatch: any) => {

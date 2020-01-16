@@ -1,4 +1,4 @@
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { TrelloList } from '../components';
 import React from 'react';
 import ActionButton from "../components/ActionButton";
@@ -22,13 +22,14 @@ class TaskList extends React.Component<ListProps>{
 
   componentDidMount() {
     const { fetchData, fetchUsers } = this.props;
+
     fetchData();
     fetchUsers();
   }
 
   onDragEnd = (result: any) => {
     const { sort, lists, updateCardsIndexes } = this.props;
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
 
     if (!destination) {
 
@@ -40,28 +41,48 @@ class TaskList extends React.Component<ListProps>{
       destination.droppableId,
       source.index,
       destination.index,
-      draggableId
+      draggableId,
+      type
     );
 
-    updateCardsIndexes(lists, source.droppableId);
+    let sourceAndDestinationId: Array<number>;
+    if (type == 'list') {
+      sourceAndDestinationId = [source.index, destination.index];
+    } else {
+      sourceAndDestinationId = [source.droppableId, destination.droppableId];
+    }
+    updateCardsIndexes(lists, sourceAndDestinationId, type);
 
   }
   render() {
     const { lists, users } = this.props;
+
+    console.log(lists)
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         {/* <h2>Trello Clone</h2> */}
-        <div style={styles.listsContainer}>
-          {lists.map((list: any) =>
-            <TrelloList
-              listID={list.id}
-              key={list.id}
-              title={list.title}
-              cards={list.cards}
-              users={users} />
-          )}
-          <ActionButton list={true} ></ActionButton>
-        </div>
+        <Droppable droppableId='all-lists' direction='horizontal' type='list'>{provided => (
+          <div style={styles.listsContainer}
+            {...provided.droppableProps}
+            ref={provided.innerRef}>
+
+            {
+              lists.map((list: any, index) =>
+
+                <TrelloList
+                  listID={list.id}
+                  key={list.id}
+                  title={list.title}
+                  cards={list.cards}
+                  users={users}
+                  index={list.index} />
+              )}
+            {provided.placeholder}
+            <ActionButton list={true} ></ActionButton>
+          </div>
+        )}
+
+        </Droppable>
 
       </DragDropContext>
     );
@@ -75,6 +96,7 @@ const mapStateToProps = (state: ListProps) => ({
 const styles = {
   listsContainer: {
     display: 'flex',
+
     borderWidth: '10px',
     marginRight: 8,
     marginTop: 20,
