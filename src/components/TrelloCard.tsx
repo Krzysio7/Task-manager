@@ -55,6 +55,10 @@ class TrelloCard extends React.Component<CardProps> {
     this.setState({ editModeEnabled: !this.state.editModeEnabled });
   }
 
+  handleTextChange = (event: any) => {
+    this.setState({ cardText: event.target.value })
+  }
+
   handleChangeAssignedUser = (event: any, child: any) => {
     const { updateCardAssignedUser, id } = this.props;
     this.setState({ userAssigned: event.target.value, currentUserId: child.key }, () => {
@@ -85,7 +89,7 @@ class TrelloCard extends React.Component<CardProps> {
                     border: this.state.editModeEnabled ? "1px solid #c0c0c0" : 'none'
                   }}>
 
-                    <textarea value={this.state.cardText} disabled={!this.state.editModeEnabled}
+                    <textarea onChange={this.handleTextChange} value={this.state.cardText} disabled={!this.state.editModeEnabled}
                       className={styles.textareaDescription}
                       style={{ pointerEvents: this.state.editModeEnabled ? 'auto' : 'none' }}
                     />
