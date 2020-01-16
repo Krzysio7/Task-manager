@@ -66,6 +66,8 @@ export const fetchData = () => async (dispatch: any) => {
           listKey: myCardFromDatabase[key].listKey,
           index: myCardFromDatabase[key].index,
           userId: myCardFromDatabase[key].userId,
+          date: myCardFromDatabase[key].date,
+          isFavourite: myCardFromDatabase[key].isFavourite
         };
       });
 
@@ -110,7 +112,9 @@ export const updateCardsIndexes = (lists: ListObject[], id: number) => async () 
           listKey: list.id,
           cardName: card.text,
           index: index,
-          userId: card.userId ? card.userId : null
+          userId: card.userId ? card.userId : null,
+          date: card.date ? card.date : null,
+          isFavourite: card.isFavourite ? card.isFavourite: null
         }
       });
   });

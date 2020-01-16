@@ -2,10 +2,8 @@ import { Card, CardContent, Icon, Typography } from "@material-ui/core";
 import React from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
-import { deleteCard, updateCardAssignedUser, getUserById } from '../actions';
+import { deleteCard, updateCardAssignedUser, getUserById, updateCardText, updateFavouriteStatus } from '../actions';
 import styles from './TrelloCard.module.css';
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem } from '@material-ui/core';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
@@ -23,6 +21,10 @@ interface CardProps {
   updateCardAssignedUser: any;
   getUserById: any;
   userId: number;
+  updateCardText: any;
+  date: string;
+  updateFavouriteStatus: any;
+  isFavourite: boolean;
 }
 
 class TrelloCard extends React.Component<CardProps> {
@@ -31,17 +33,19 @@ class TrelloCard extends React.Component<CardProps> {
     editModeEnabled: false,
     userAssigned: "",
     currentUserId: undefined,
-    cardText: undefined
+    cardText: '',
+    isFavourite: false
   }
 
   async componentDidMount() {
+  
     const { getUserById, userId, users } = this.props;
-
+    console.log(this.props.isFavourite);
     let user: UserObject = await getUserById(userId, users);
     if (user) {
-      this.setState({ userAssigned: user.firstName + " " + user.lastName, currentUserId: userId, cardText: this.props.text });
+      this.setState({ userAssigned: user.firstName + " " + user.lastName, currentUserId: userId, cardText: this.props.text, isFavourite: this.props.isFavourite });
     } else {
-      this.setState({ cardText: this.props.text });
+      this.setState({ cardText: this.props.text,isFavourite: this.props.isFavourite });
     }
 
   }
@@ -51,7 +55,11 @@ class TrelloCard extends React.Component<CardProps> {
     deleteCard(id, listID);
   }
 
-  handleClick = () => {
+  handleClick = async () => {
+    if (this.state.editModeEnabled) {
+      const { id, updateCardText } = this.props;
+      await updateCardText(id, this.state.cardText);
+    }
     this.setState({ editModeEnabled: !this.state.editModeEnabled });
   }
 
@@ -66,6 +74,14 @@ class TrelloCard extends React.Component<CardProps> {
     });
   }
 
+  handleFavourite = () => {
+    const { id, updateFavouriteStatus } = this.props;
+    this.setState({ isFavourite: !this.state.isFavourite }, () => { 
+      updateFavouriteStatus(id, this.state.isFavourite);
+    })
+  
+  }
+
   render() {
     const { users } = this.props;
     return (
@@ -76,7 +92,7 @@ class TrelloCard extends React.Component<CardProps> {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Card className={styles.cardContainer}>
+            <Card className={this.state.isFavourite?styles.cardContainerFavourite : styles.cardContainer}>
               <CardContent >
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Icon style={{ cursor: 'pointer', color: 'red' }}
@@ -103,7 +119,7 @@ class TrelloCard extends React.Component<CardProps> {
                     }}></Link> */}
                   </div>
 
-                  <Icon style={{ cursor: 'pointer' }} onClick={this.handleClick}>edit</Icon>
+                
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   Assigned:
@@ -124,10 +140,15 @@ class TrelloCard extends React.Component<CardProps> {
                     </Select>
                     <FormHelperText>Assign User</FormHelperText>
                   </FormControl>
-
+                </div>
+                <div className={styles.cardActionsStyle}>
+                  <text className={styles.dateTextStyle}>{this.props.date}</text>
+               <div>
+                  <Icon style={{ cursor: 'pointer' }} onClick={this.handleFavourite}>star</Icon>
+                    <Icon style={{ cursor: 'pointer' }} onClick={this.handleClick}>edit</Icon>
+                    </div>
                 </div>
               </CardContent>
-
             </Card>
           </div>
         )}
@@ -137,6 +158,4 @@ class TrelloCard extends React.Component<CardProps> {
 
 }
 
-
-
-export default connect(null, { deleteCard, updateCardAssignedUser, getUserById })(TrelloCard)
+export default connect(null, { deleteCard, updateCardAssignedUser, getUserById, updateCardText, updateFavouriteStatus })(TrelloCard)

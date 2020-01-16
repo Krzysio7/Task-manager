@@ -5,6 +5,8 @@ export interface CardObject {
   text: string;
   index: number;
   userId: number;
+  date: string;
+  isFavourite: boolean;
 }
 export interface ListObject {
   title: string;
@@ -94,7 +96,9 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
                     id: card.key,
                     text: card.cardName,
                     index: card.index,
-                    userId: card.userId
+                    userId: card.userId,
+                    date: card.date,
+                    isFavourite: card.isFavourite
                   }
                   temp.cards.push(tempCard);
                 }
@@ -128,6 +132,20 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
             const card: CardObject[] = list.cards.splice(droppableIndexStart, 1);
             list?.cards.splice(droppableIndexEnd, 0, ...card);
           }
+        }
+
+        if (droppableIdStart !== droppableIdEnd) {
+          // find the list where drag happened
+          const listStart = state.find(list => droppableIdStart === list.id)
+          
+          if (listStart !== undefined) { 
+            const card = listStart.cards.splice(droppableIndexStart, 1);
+
+            const listEnd = state.find(list => droppableIdEnd === list.id);
+  
+            listEnd?.cards.splice(droppableIndexEnd, 0, ...card);
+          }
+         
         }
         return newState;
       }

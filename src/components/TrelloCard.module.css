@@ -17,6 +17,15 @@
   justify-content: space-between;
 }
 
+:local(.cardContainerFavourite) {
+  margin-bottom: 8px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 3px solid red;
+}
+
 :local(.textareaDescription) {
   resize: none;
   width: 100%;
@@ -24,4 +33,16 @@
   outline: none;
   border: none;
   pointer-events: none;
+}
+
+:local(.dateTextStyle) {
+  font-size: 10px;
+  display: flex;
+}
+
+:local(.cardActionsStyle) {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 10%;
 }

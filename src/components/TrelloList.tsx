@@ -21,7 +21,9 @@ const TrelloList = ({ listID, title, cards, users }: { listID: number, title: st
               id={card.id}
               listID={listID}
               users={users}
-              userId={card.userId} />
+              userId={card.userId}
+              date={card.date}
+              isFavourite={card.isFavourite}/>
           )}
 
           {provided.placeholder}

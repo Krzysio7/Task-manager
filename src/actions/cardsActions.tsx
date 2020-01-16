@@ -18,7 +18,8 @@ export const addCard = (listID: number, text: any, lastIndex: number, date: Date
           listKey: listID,
           cardName: text,
           index: lastIndex,
-          date: date.toString(),
+          date: date.toUTCString(),
+          isFavourite: false,
         }
       });
 
@@ -43,9 +44,23 @@ export const deleteCard = (id: number, listID: number) => async (dispatch: any) 
 }
 
 export const updateCardAssignedUser = (id: number, userId: number) => async () => {
-
+  console.log(id + " : " + userId);
   listsRef
     .child("cards")
     .child(String(id))
     .update({ userId: userId });
+}
+
+export const updateCardText = (id: number, text: string) => async () => {
+  listsRef
+    .child("cards")
+    .child(String(id))
+    .update({ cardName: text });
+}
+
+export const updateFavouriteStatus = (id: number, isFavourite: boolean) => async () => {
+  listsRef
+    .child("cards")
+    .child(String(id))
+    .update({ isFavourite: isFavourite });
 }
