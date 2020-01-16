@@ -106,30 +106,36 @@ export const sort = (
 export const updateCardsIndexes = (lists: ListObject[], id: number[], type: string) => async () => {
 
   if (type == 'list') {
+    const newList = [...lists];
 
 
+    const list = newList.splice(id[0], 1);
+    newList.splice(id[1], 0, ...list);
 
-    // id.forEach(element => {
-    console.log(id[0] + " : " + id[1]);
-    const sourceList = lists.find(list => list.index == id[0]);
-    const destinationList = lists.find(list => list.index == id[1]);
+    newList.forEach((element, index) => {
+      console.log(element)
+      listsRef
+        .child("lists")
+        .child(String(element.id))
+        .update({ index: index });
+    });
 
-    console.log(sourceList)
-    listsRef
-      .child("lists")
-      .child(String(sourceList?.id))
-      .update({ index: destinationList?.index });
+    // const sourceList = lists.find(list => list.index == id[0]);
+    // const destinationList = lists.find(list => list.index == id[1]);
 
-    listsRef
-      .child("lists")
-      .child(String(destinationList?.id))
-      .update({ index: sourceList?.index })
-    // });
+    // listsRef
+    //   .child("lists")
+    //   .child(String(sourceList?.id))
+    //   .update({ index: destinationList?.index });
+
+    // listsRef
+    //   .child("lists")
+    //   .child(String(destinationList?.id))
+    //   .update({ index: sourceList?.index })
 
   } else {
 
     id.forEach(element => {
-
 
       const list = lists.find(list => element === list.id);
 

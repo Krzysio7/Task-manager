@@ -75,10 +75,10 @@ class TaskList extends React.Component<ListProps>{
                   title={list.title}
                   cards={list.cards}
                   users={users}
-                  index={list.index} />
+                  index={index} />
               )}
             {provided.placeholder}
-            <ActionButton list={true} ></ActionButton>
+
           </div>
         )}
 

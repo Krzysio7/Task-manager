@@ -126,7 +126,7 @@ class ActionButton extends React.Component<ListType> {
             style={{ color: 'white', backgroundColor: '#5aac44' }}>
             {buttonTitle}{''}
           </Button>
-          <Icon style={{ marginLeft: 8, cursor: 'pointer' }}>close</Icon>
+
         </div>
       </div>
     );
