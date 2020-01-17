@@ -9,7 +9,7 @@ import { fetchData, sort, updateCardsIndexes, fetchUsers } from '../actions';
 import { withRouter } from "react-router-dom";
 
 interface ListProps {
-  lists: Array<ListObject>;
+  lists: { lists: ListObject[], filter: any };
   dispatch?: any;
   fetchData: any;
   sort: any;
@@ -71,7 +71,7 @@ class TaskList extends React.Component<ListProps>{
             ref={provided.innerRef}>
 
             {
-              lists.map((list: any, index) =>
+              lists.lists.map((list: any, index) =>
 
                 <TrelloList
                   listID={list.id}
@@ -79,7 +79,8 @@ class TaskList extends React.Component<ListProps>{
                   title={list.title}
                   cards={list.cards}
                   users={users}
-                  index={index} />
+                  index={index}
+                  filter={lists.filter}/>
               )}
             {provided.placeholder}
 

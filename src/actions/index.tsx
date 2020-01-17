@@ -5,7 +5,8 @@ export enum ListActions {
   DRAG_HAPPENED = "DRAG_HAPPENED",
   DELETE_CARD = "DELETE_CARD",
   DELETE_LIST = "DELETE_CARD",
-  UPDATE_CARD = "UPDATE_CARD"
+  UPDATE_CARD = "UPDATE_CARD",
+  FILTER_LIST = "FILTER_LIST"
 }
 
 export enum UsersActions {

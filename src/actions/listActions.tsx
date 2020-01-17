@@ -90,18 +90,18 @@ export const sort = (
   droppableIndexEnd: any,
   draggableId: any,
   type: any,
-  lists: ListObject[],
+  lists: { lists: ListObject[], filter: any },
   users: UserObject[]) => async (dispatch: any) => {
-console.log(type)
-    if (type !== 'list') { 
-      const listStart = lists.find(list => droppableIdStart === list.id)
-   
+
+    if (type !== 'list') {
+      const listStart = lists.lists.find(list => droppableIdStart === list.id)
+
       if (listStart != undefined) {
         let dragCard = listStart.cards[droppableIndexStart];
         const cardAssignedUser = users.find(user => dragCard.userId == user.id);
         console.log(cardAssignedUser)
         const isPermitted: boolean = cardAssignedUser?.jobTitle === 'Project Manager';
-        
+
         dispatch({
           type: ListActions.DRAG_HAPPENED,
           payload: {
@@ -114,9 +114,9 @@ console.log(type)
             isPermitted
           }
         });
-    }
+      }
 
-    } else { 
+    } else {
 
       dispatch({
         type: ListActions.DRAG_HAPPENED,
@@ -129,21 +129,24 @@ console.log(type)
           type
         }
       });
-     }
+    }
 
-  
+
   }
 
-export const updateCardsIndexes = (lists: ListObject[], id: number[], type: string) => async () => {
+export const updateCardsIndexes = (lists: { lists: ListObject[], filter: any }, id: number[], type: string) => async () => {
 
   if (type == 'list') {
-    const newList = [...lists];
+    const newList = { ...lists };
 
+    // console.log(  newList)
+    // const list = newList.lists.splice(id[0], 1);
+    // console.log("id: " + id[0]);
+    // console.log(list)
+    // console.log("id: " + id[1]);
+    // newList.lists.splice(id[1], 0, ...list);
 
-    const list = newList.splice(id[0], 1);
-    newList.splice(id[1], 0, ...list);
-
-    newList.forEach((element, index) => {
+    newList.lists.forEach((element, index) => {
       console.log(element)
       listsRef
         .child("lists")
@@ -168,7 +171,7 @@ export const updateCardsIndexes = (lists: ListObject[], id: number[], type: stri
 
     id.forEach(element => {
 
-      const list = lists.find(list => element === list.id);
+      const list = lists.lists.find(list => element === list.id);
 
       list?.cards.map((card: CardObject, index) => {
 
@@ -212,5 +215,13 @@ export const deleteList = (listID: number) => async (dispatch: any) => {
   dispatch({
     type: ListActions.DELETE_LIST,
     payload: listID,
+  });
+} 
+
+export const updateFilter = (filter: number) => async (dispatch: any) => {
+
+  dispatch({
+    type: ListActions.FILTER_LIST,
+    payload: filter,
   });
 } 

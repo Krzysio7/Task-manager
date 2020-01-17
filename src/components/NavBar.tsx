@@ -1,4 +1,5 @@
 import React from 'react'
+import {updateFilter} from '../actions'
 import { MenuItem } from '@material-ui/core';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
@@ -8,13 +9,20 @@ import { ListObject } from '../reducers/listsReducer';
 import { UserObject } from '../reducers/usersReducer';
 
 export interface NavProps { 
-  lists: ListObject[],
-  users: UserObject[]
+  lists:{ lists: ListObject[], filter: any },
+  users: UserObject[],
+  updateFilter:any
 }
 
 class NavBar extends React.Component<NavProps> {
 
   handleChangeAssignedUser = (event: any, child: any) => {
+
+    const { updateFilter } = this.props;
+console.log(child.key)
+    updateFilter(child.key)
+
+
     // const { updateCardAssignedUser, id, listID } = this.props;
     // this.setState({ userAssigned: event.target.value, currentUserId: child.key }, () => {
     //   updateCardAssignedUser(id, child.key, listID);
@@ -57,4 +65,4 @@ const mapStateToProps = (state: NavProps) => ({
   users: state.users,
 });
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps, {updateFilter})(NavBar);

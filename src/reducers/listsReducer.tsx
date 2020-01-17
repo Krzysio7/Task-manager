@@ -16,17 +16,18 @@ export interface ListObject {
 
 }
 
-const listsReducer = (state: ListObject[] = [], action: any) => {
+const listsReducer = (state: { lists: ListObject[], filter: any } = { lists: [], filter: undefined }, action: any) => {
   switch (action.type) {
-    case ListActions.ADD_LIST:
-      {
-        const newList = {
-          title: action.payload.title,
-          cards: [],
-          id: action.payload.newListKey
-        }
-        return [...state, newList];
-      }
+    // case ListActions.ADD_LIST:
+    //   {
+    //     const newList = { lists:{
+    //       title: action.payload.title,
+    //       cards: [],
+    //       id: action.payload.newListKey
+    //     },filter:undefined
+    //   }
+    //     return {...state};
+    //   }
 
     case ListActions.ADD_CARD:
       {
@@ -34,8 +35,8 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
           id: action.payload.newCardKey,
           text: action.payload.text
         }
-
-        const newState = state.map((list: any) => {
+        const newState = { ...state };
+        newState.lists.map((list: any) => {
           if (list.id === action.payload.listID) {
             return {
               ...list,
@@ -50,7 +51,8 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
 
     case ListActions.DELETE_CARD:
       {
-        const newState = state.map((list: ListObject) => {
+        const newState = { ...state };
+        newState.lists.map((list: ListObject) => {
           if (list.id === action.payload.listID) {
 
             const filteredCards = list.cards.filter((card) => card.id !== action.payload.id);
@@ -66,19 +68,19 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
         return newState;
       }
 
-    case ListActions.DELETE_LIST:
-      {
-        const newState = state.filter((list: ListObject) =>
+    // case ListActions.DELETE_LIST:
+    //   {
+    //     const newState = state.lists.filter((list: ListObject) =>
 
-          list.id !== action.payload
+    //       list.id !== action.payload
 
-        );
-        return newState;
-      }
+    //     );
+    //     return newState;
+    //   }
 
     case ListActions.FETCH_DATA:
       {
-        const initialList: ListObject[] = [];
+        const initialList: { lists: ListObject[], filter: any } = { lists: [], filter: undefined };
         if (action.payload.lists) {
           action.payload.lists.map((list: any) => {
 
@@ -110,10 +112,10 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
               });
             }
 
-            initialList.push(temp);
+            initialList.lists.push(temp);
           });
         }
-        initialList.sort((a, b) => {
+        initialList.lists.sort((a, b) => {
           return a.index - b.index;
         });
 
@@ -132,16 +134,16 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
           isPermitted,
         } = action.payload;
 
-        const newState = [...state];
+        const newState = { ...state };
 
         if (type === 'list') {
-          const list = newState.splice(droppableIndexStart, 1);
-          newState.splice(droppableIndexEnd, 0, ...list);
+          const list = newState.lists.splice(droppableIndexStart, 1);
+          newState.lists.splice(droppableIndexEnd, 0, ...list);
           return newState;
         }
 
         if (droppableIdStart === droppableIdEnd) {
-          const list = state.find(list => droppableIdStart === list.id);
+          const list = state.lists.find(list => droppableIdStart === list.id);
           if (list !== undefined) {
             const card: CardObject[] = list.cards.splice(droppableIndexStart, 1);
             list?.cards.splice(droppableIndexEnd, 0, ...card);
@@ -152,8 +154,8 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
 
           console.log(isPermitted)
           // find the list where drag happened
-          const listStart = state.find(list => droppableIdStart === list.id)
-          const listEnd = state.find(list => droppableIdEnd === list.id);
+          const listStart = state.lists.find(list => droppableIdStart === list.id)
+          const listEnd = state.lists.find(list => droppableIdEnd === list.id);
 
           if (listStart !== undefined) {
 
@@ -173,15 +175,24 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
 
     case ListActions.UPDATE_CARD: {
       const { id, userId, listID, userName } = action.payload;
-      const newState = [...state];
+      const newState = { ...state };
 
-      let list = newState.find(list => list.id == listID);
+      let list = newState.lists.find(list => list.id == listID);
       if (list != undefined) {
         let card = list.cards.find(card => card.id == id);
         if (card != undefined) {
           card.userId = userId;
         }
       }
+      return newState;
+    }
+    case ListActions.FILTER_LIST: {
+      // const { filter } = action.payload;
+      const newState = { ...state };
+
+      newState.filter = action.payload;
+
+      console.log(action.payload)
       return newState;
     }
     default:
