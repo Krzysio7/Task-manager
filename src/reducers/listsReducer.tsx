@@ -128,7 +128,8 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
           droppableIndexStart,
           droppableIndexEnd,
           draggableId,
-          type
+          type,
+          isPermitted,
         } = action.payload;
 
         const newState = [...state];
@@ -148,19 +149,41 @@ const listsReducer = (state: ListObject[] = [], action: any) => {
         }
 
         if (droppableIdStart !== droppableIdEnd) {
+
+          console.log(isPermitted)
           // find the list where drag happened
           const listStart = state.find(list => droppableIdStart === list.id)
           const listEnd = state.find(list => droppableIdEnd === list.id);
 
           if (listStart !== undefined) {
-            const card = listStart.cards.splice(droppableIndexStart, 1);
 
-            listEnd?.cards.splice(droppableIndexEnd, 0, ...card);
+            if (listEnd !== undefined && listEnd.title === 'Zakończone' && isPermitted) {
+              const card = listStart.cards.splice(droppableIndexStart, 1);
+              listEnd?.cards.splice(droppableIndexEnd, 0, ...card);
+            } else if (listEnd !== undefined && listEnd.title !== 'Zakończone') {
+              const card = listStart.cards.splice(droppableIndexStart, 1);
+              listEnd?.cards.splice(droppableIndexEnd, 0, ...card);
+            }
+
           }
 
         }
         return newState;
       }
+
+    case ListActions.UPDATE_CARD: {
+      const { id, userId, listID, userName } = action.payload;
+      const newState = [...state];
+
+      let list = newState.find(list => list.id == listID);
+      if (list != undefined) {
+        let card = list.cards.find(card => card.id == id);
+        if (card != undefined) {
+          card.userId = userId;
+        }
+      }
+      return newState;
+    }
     default:
       return state;
   }

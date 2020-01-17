@@ -43,8 +43,14 @@ export const deleteCard = (id: number, listID: number) => async (dispatch: any) 
 
 }
 
-export const updateCardAssignedUser = (id: number, userId: number) => async () => {
+export const updateCardAssignedUser = (id: number, userId: number, listID: number) => async (dispatch: any) => {
   console.log(id + " : " + userId);
+
+  dispatch({
+    type: ListActions.UPDATE_CARD,
+    payload: { id, userId, listID }
+  });
+
   listsRef
     .child("cards")
     .child(String(id))
@@ -59,8 +65,10 @@ export const updateCardText = (id: number, text: string) => async () => {
 }
 
 export const updateFavouriteStatus = (id: number, isFavourite: boolean) => async () => {
+
   listsRef
     .child("cards")
     .child(String(id))
     .update({ isFavourite: isFavourite });
+  
 }

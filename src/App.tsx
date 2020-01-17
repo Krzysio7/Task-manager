@@ -2,8 +2,9 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import TaskList from './scenes/TaskList';
-import { NavBar } from './components';
+
 import UserCard from './components/UserCard';
+import NavBar from './components/NavBar';
 
 
 class App extends React.Component {

@@ -4,7 +4,8 @@ export enum ListActions {
   FETCH_DATA = "FETCH_DATA",
   DRAG_HAPPENED = "DRAG_HAPPENED",
   DELETE_CARD = "DELETE_CARD",
-  DELETE_LIST = "DELETE_CARD"
+  DELETE_LIST = "DELETE_CARD",
+  UPDATE_CARD = "UPDATE_CARD"
 }
 
 export enum UsersActions {

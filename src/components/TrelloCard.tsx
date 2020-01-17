@@ -68,9 +68,9 @@ class TrelloCard extends React.Component<CardProps> {
   }
 
   handleChangeAssignedUser = (event: any, child: any) => {
-    const { updateCardAssignedUser, id } = this.props;
+    const { updateCardAssignedUser, id, listID } = this.props;
     this.setState({ userAssigned: event.target.value, currentUserId: child.key }, () => {
-      updateCardAssignedUser(id, child.key);
+      updateCardAssignedUser(id, child.key, listID);
     });
   }
 

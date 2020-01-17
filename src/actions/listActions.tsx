@@ -1,6 +1,7 @@
 import { ListActions } from ".";
 import { listsRef } from "../config/firebase";
 import { CardObject, ListObject } from "../reducers/listsReducer";
+import { UserObject } from "../reducers/usersReducer";
 
 export const addList = (title: any) => async (dispatch: any) => {
 
@@ -88,19 +89,49 @@ export const sort = (
   droppableIndexStart: any,
   droppableIndexEnd: any,
   draggableId: any,
-  type: any) => async (dispatch: any) => {
+  type: any,
+  lists: ListObject[],
+  users: UserObject[]) => async (dispatch: any) => {
+console.log(type)
+    if (type !== 'list') { 
+      const listStart = lists.find(list => droppableIdStart === list.id)
+   
+      if (listStart != undefined) {
+        let dragCard = listStart.cards[droppableIndexStart];
+        const cardAssignedUser = users.find(user => dragCard.userId == user.id);
+        console.log(cardAssignedUser)
+        const isPermitted: boolean = cardAssignedUser?.jobTitle === 'Project Manager';
+        
+        dispatch({
+          type: ListActions.DRAG_HAPPENED,
+          payload: {
+            droppableIdStart,
+            droppableIdEnd,
+            droppableIndexStart,
+            droppableIndexEnd,
+            draggableId,
+            type,
+            isPermitted
+          }
+        });
+    }
 
-    dispatch({
-      type: ListActions.DRAG_HAPPENED,
-      payload: {
-        droppableIdStart,
-        droppableIdEnd,
-        droppableIndexStart,
-        droppableIndexEnd,
-        draggableId,
-        type
-      }
-    });
+    } else { 
+
+      dispatch({
+        type: ListActions.DRAG_HAPPENED,
+        payload: {
+          droppableIdStart,
+          droppableIdEnd,
+          droppableIndexStart,
+          droppableIndexEnd,
+          draggableId,
+          type
+        }
+      });
+     }
+
+  
   }
 
 export const updateCardsIndexes = (lists: ListObject[], id: number[], type: string) => async () => {

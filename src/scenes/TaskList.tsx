@@ -28,8 +28,10 @@ class TaskList extends React.Component<ListProps>{
   }
 
   onDragEnd = (result: any) => {
-    const { sort, lists, updateCardsIndexes } = this.props;
+    const { sort, lists, updateCardsIndexes,users } = this.props;
     const { destination, source, draggableId, type } = result;
+
+    console.log(result)
 
     if (!destination) {
 
@@ -42,7 +44,9 @@ class TaskList extends React.Component<ListProps>{
       source.index,
       destination.index,
       draggableId,
-      type
+      type,
+      lists,
+      users
     );
 
     let sourceAndDestinationId: Array<number>;
