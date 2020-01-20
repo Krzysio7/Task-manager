@@ -35,8 +35,8 @@ const listsReducer = (state: { lists: ListObject[], filter: any } = { lists: [],
           id: action.payload.newCardKey,
           text: action.payload.text
         }
-        const newState = { ...state };
-        newState.lists.map((list: any) => {
+        let newState = { ...state };
+        const tempState = state.lists.map((list: any) => {
           if (list.id === action.payload.listID) {
             return {
               ...list,
@@ -46,13 +46,16 @@ const listsReducer = (state: { lists: ListObject[], filter: any } = { lists: [],
             return list;
           }
         });
+        newState.lists = tempState;
+        newState.filter = state.filter;
+
         return newState;
       }
 
     case ListActions.DELETE_CARD:
       {
         const newState = { ...state };
-        newState.lists.map((list: ListObject) => {
+        const tempState = state.lists.map((list: ListObject) => {
           if (list.id === action.payload.listID) {
 
             const filteredCards = list.cards.filter((card) => card.id !== action.payload.id);
@@ -65,6 +68,9 @@ const listsReducer = (state: { lists: ListObject[], filter: any } = { lists: [],
             return list;
           }
         });
+        newState.lists = tempState;
+        newState.filter = state.filter;
+
         return newState;
       }
 
