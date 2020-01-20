@@ -7,6 +7,7 @@ import { UserObject } from '../reducers/usersReducer';
 import { connect } from "react-redux";
 import { fetchData, sort, updateCardsIndexes, fetchUsers } from '../actions';
 import { withRouter } from "react-router-dom";
+import FilterTab from "../components/FilterTab";
 
 interface ListProps {
   lists: { lists: ListObject[], filter: any };
@@ -62,9 +63,9 @@ class TaskList extends React.Component<ListProps>{
     const { lists, users } = this.props;
 
     console.log(lists)
-    return (
+    return (<div>
+      <FilterTab />
       <DragDropContext onDragEnd={this.onDragEnd}>
-        {/* <h2>Trello Clone</h2> */}
         <Droppable droppableId='all-lists' direction='horizontal' type='list'>{provided => (
           <div style={styles.listsContainer}
             {...provided.droppableProps}
@@ -90,6 +91,7 @@ class TaskList extends React.Component<ListProps>{
         </Droppable>
 
       </DragDropContext>
+      </div>
     );
   }
 }

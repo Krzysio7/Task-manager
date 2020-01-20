@@ -38,14 +38,14 @@ class TrelloCard extends React.Component<CardProps> {
   }
 
   async componentDidMount() {
-  
+
     const { getUserById, userId, users } = this.props;
     console.log(this.props.isFavourite);
     let user: UserObject = await getUserById(userId, users);
     if (user) {
       this.setState({ userAssigned: user.firstName + " " + user.lastName, currentUserId: userId, cardText: this.props.text, isFavourite: this.props.isFavourite });
     } else {
-      this.setState({ cardText: this.props.text,isFavourite: this.props.isFavourite });
+      this.setState({ cardText: this.props.text, isFavourite: this.props.isFavourite });
     }
 
   }
@@ -76,10 +76,10 @@ class TrelloCard extends React.Component<CardProps> {
 
   handleFavourite = () => {
     const { id, updateFavouriteStatus } = this.props;
-    this.setState({ isFavourite: !this.state.isFavourite }, () => { 
+    this.setState({ isFavourite: !this.state.isFavourite }, () => {
       updateFavouriteStatus(id, this.state.isFavourite);
     })
-  
+
   }
 
   render() {
@@ -92,7 +92,7 @@ class TrelloCard extends React.Component<CardProps> {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Card className={this.state.isFavourite?styles.cardContainerFavourite : styles.cardContainer}>
+            <Card className={this.state.isFavourite ? styles.cardContainerFavourite : styles.cardContainer}>
               <CardContent >
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Icon style={{ cursor: 'pointer', color: 'red' }}
@@ -119,7 +119,7 @@ class TrelloCard extends React.Component<CardProps> {
                     }}></Link> */}
                   </div>
 
-                
+
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   Assigned:
@@ -143,10 +143,10 @@ class TrelloCard extends React.Component<CardProps> {
                 </div>
                 <div className={styles.cardActionsStyle}>
                   <text className={styles.dateTextStyle}>{this.props.date}</text>
-               <div>
-                  <Icon style={{ cursor: 'pointer' }} onClick={this.handleFavourite}>star</Icon>
+                  <div>
+                    <Icon style={{ cursor: 'pointer' }} onClick={this.handleFavourite}>star</Icon>
                     <Icon style={{ cursor: 'pointer' }} onClick={this.handleClick}>edit</Icon>
-                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>

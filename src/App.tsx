@@ -5,6 +5,7 @@ import TaskList from './scenes/TaskList';
 
 import UserCard from './components/UserCard';
 import NavBar from './components/NavBar';
+import FilterTab from './components/FilterTab';
 
 
 class App extends React.Component {
