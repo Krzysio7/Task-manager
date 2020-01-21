@@ -158,7 +158,6 @@ const listsReducer = (state: { lists: ListObject[], filter: any } = { lists: [],
 
         if (droppableIdStart !== droppableIdEnd) {
 
-          console.log(isPermitted)
           // find the list where drag happened
           const listStart = state.lists.find(list => droppableIdStart === list.id)
           const listEnd = state.lists.find(list => droppableIdEnd === list.id);
@@ -198,7 +197,6 @@ const listsReducer = (state: { lists: ListObject[], filter: any } = { lists: [],
 
       newState.filter = action.payload;
 
-      console.log(action.payload)
       return newState;
     }
     default:

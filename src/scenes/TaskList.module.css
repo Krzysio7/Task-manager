@@ -1,0 +1,8 @@
+:local(.listsContainer){
+
+    display: flex;
+    border-width: 10px;
+    margin-right: 8px;
+    margin-top: 20px;
+    margin-left: 20px;
+}

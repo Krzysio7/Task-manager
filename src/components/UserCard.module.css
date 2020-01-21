@@ -7,3 +7,51 @@
 :local(.userText) {
     text-align: left;
 }
+
+:local(.mainContainer) {
+    display: flex;
+    flex-direction: column;
+}
+
+:local(.cardContainer) {
+    display: flex;
+    width: 25%;
+}
+
+:local(.innerCardContainer) {
+    display: flex;
+    flex-direction: row;
+}
+
+:local(.cardContentStyle) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+:local(.mapContainerStyle) {
+    flex: 1;
+}
+
+:local(.tasksContainer) {
+    display: flex;
+    width: 25%;
+    justify-content: center;
+    flex-direction: column;
+    background: green;
+}
+
+:local(.taskCardStyle){
+    display: flex;
+    width: 80%;
+    margin: 5%;
+    align-self: center;
+}
+
+:local(.taskCardContentStyle){
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}

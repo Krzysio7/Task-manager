@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import TextareaAutosize from 'react-textarea-autosize';
 import { addCard, addList, deleteList } from '../actions';
+import styles from './ActionButton.module.css';
 
 interface ListType {
   list?: boolean;
@@ -32,16 +33,16 @@ class ActionButton extends React.Component<ListType> {
     this.setState({ text: event.target.value });
   }
 
-  handleAddList = () => {
-    const { addList } = this.props;
-    const { text } = this.state;
+  // handleAddList = () => {
+  //   const { addList } = this.props;
+  //   const { text } = this.state;
 
-    if (text) {
-      addList(text);
-      this.setState({ text: '' });
-    }
-    return;
-  }
+  //   if (text) {
+  //     addList(text);
+  //     this.setState({ text: '' });
+  //   }
+  //   return;
+  // }
 
   handleAddCard = () => {
     const { listID, addCard, lastIndex } = this.props;
@@ -55,36 +56,19 @@ class ActionButton extends React.Component<ListType> {
     return;
   }
 
-  deleteList = () => {
-    const { listID, deleteList } = this.props;
-    deleteList(listID);
-  }
+  // deleteList = () => {
+  //   const { listID, deleteList } = this.props;
+  //   deleteList(listID);
+  // }
 
   renderAddButton = () => {
-    const { list } = this.props;
-    const buttonText = list ? 'Add another list' : 'Add antoher card';
-    const buttonTextOpacity = list ? 1 : 0.5;
-    const buttonTextColor = list ? 'white' : 'inherit';
-    const buttonTextBackground = list ? 'rgba(0,0,0,.15)' : 'inherit';
+    const buttonText = 'Add antoher card';
 
     return (
       <div
         onClick={this.openForm}
-        style={{
-          ...styles.openFormButtonGroup,
-          opacity: buttonTextOpacity,
-          color: buttonTextColor,
-          backgroundColor: buttonTextBackground,
-          display: 'flex',
-          flexDirection: 'row'
-        }}>
-
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          flex: 1
-        }}>
+        className={styles.openFormButtonGroup}>
+        <div className={styles.addButtonContainer}>
           <Icon>add</Icon>
           <p>{buttonText}</p>
         </div>
@@ -97,36 +81,28 @@ class ActionButton extends React.Component<ListType> {
   }
 
   renderForm = () => {
-    const { list } = this.props;
-    const placeHolder = list ? 'Enter list title...' : 'Enter a title for this card';
-    const buttonTitle = list ? 'Add List' : 'Add Card';
+    const placeHolder = 'Enter a title for this card';
+    const buttonTitle = 'Add Card';
 
     return (
       <div>
-        <Card style={styles.cardStyle}>
+        <Card className={styles.cardStyle}>
           <TextareaAutosize
             placeholder={placeHolder}
             onBlur={this.closeForm}
             autoFocus
             value={this.state.text}
             onChange={this.onTextChange}
-            style={{
-              resize: 'none',
-              width: '100%',
-              overflow: 'hidden',
-              outline: 'none',
-              border: 'none'
-            }}
+            className={styles.textAreaStyle}
           />
         </Card>
-        <div style={styles.formButtonGroup}>
+        <div className={styles.formButtonGroup}>
           <Button
-            onMouseDown={list ? this.handleAddList : this.handleAddCard}
+            onMouseDown={this.handleAddCard}
             variant='contained'
-            style={{ color: 'white', backgroundColor: '#5aac44' }}>
+            className={styles.addCardButton}>
             {buttonTitle}{''}
           </Button>
-
         </div>
       </div>
     );
@@ -139,26 +115,4 @@ class ActionButton extends React.Component<ListType> {
   }
 }
 
-const styles = {
-  openFormButtonGroup: {
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-    borderRadius: 3,
-    height: 36,
-    width: 272,
-    paddingLeft: 10
-  },
-  formButtonGroup: {
-    marginTop: 8,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  cardStyle: {
-    overflow: 'visible',
-    minHeight: 80,
-    minWidth: 272,
-    padding: '6px 8px 2px',
-  }
-}
 export default connect(null, { addList, addCard, deleteList })(ActionButton);

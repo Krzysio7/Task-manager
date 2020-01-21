@@ -20,7 +20,6 @@ const usersReducer = (state: UserObject[] = [], action: any) => {
   switch (action.type) {
     case UsersActions.FETCH_USERS:
       {
-        console.log(action.type)
         let payload: UserObject[] = action.payload;
         const initialUsers: UserObject[] = [];
 

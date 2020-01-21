@@ -1,13 +1,13 @@
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { TrelloList } from '../components';
 import React from 'react';
-import ActionButton from "../components/ActionButton";
 import { ListObject } from '../reducers/listsReducer';
 import { UserObject } from '../reducers/usersReducer';
 import { connect } from "react-redux";
 import { fetchData, sort, updateCardsIndexes, fetchUsers } from '../actions';
 import { withRouter } from "react-router-dom";
 import FilterTab from "../components/FilterTab";
+import styles from './TaskList.module.css';
 
 interface ListProps {
   lists: { lists: ListObject[], filter: any };
@@ -31,8 +31,6 @@ class TaskList extends React.Component<ListProps>{
   onDragEnd = (result: any) => {
     const { sort, lists, updateCardsIndexes,users } = this.props;
     const { destination, source, draggableId, type } = result;
-
-    console.log(result)
 
     if (!destination) {
 
@@ -62,15 +60,13 @@ class TaskList extends React.Component<ListProps>{
   render() {
     const { lists, users } = this.props;
 
-    console.log(lists)
     return (<div>
       <FilterTab />
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable droppableId='all-lists' direction='horizontal' type='list'>{provided => (
-          <div style={styles.listsContainer}
+          <div className={styles.listsContainer}
             {...provided.droppableProps}
             ref={provided.innerRef}>
-
             {
               lists.lists.map((list: any, index) =>
 
@@ -84,12 +80,9 @@ class TaskList extends React.Component<ListProps>{
                   filter={lists.filter}/>
               )}
             {provided.placeholder}
-
           </div>
         )}
-
         </Droppable>
-
       </DragDropContext>
       </div>
     );
@@ -100,14 +93,4 @@ const mapStateToProps = (state: ListProps) => ({
   users: state.users,
 });
 
-const styles = {
-  listsContainer: {
-    display: 'flex',
-
-    borderWidth: '10px',
-    marginRight: 8,
-    marginTop: 20,
-    marginLeft: 20
-  }
-}
 export default withRouter(connect(mapStateToProps, { fetchData, fetchUsers, sort, updateCardsIndexes })(TaskList) as any);

@@ -44,7 +44,6 @@ export const deleteCard = (id: number, listID: number) => async (dispatch: any) 
 }
 
 export const updateCardAssignedUser = (id: number, userId: number, listID: number) => async (dispatch: any) => {
-  console.log(id + " : " + userId);
 
   dispatch({
     type: ListActions.UPDATE_CARD,

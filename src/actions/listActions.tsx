@@ -99,7 +99,6 @@ export const sort = (
       if (listStart != undefined) {
         let dragCard = listStart.cards[droppableIndexStart];
         const cardAssignedUser = users.find(user => dragCard.userId == user.id);
-        console.log(cardAssignedUser)
         const isPermitted: boolean = cardAssignedUser?.jobTitle === 'Project Manager';
 
         dispatch({
@@ -147,7 +146,6 @@ export const updateCardsIndexes = (lists: { lists: ListObject[], filter: any }, 
     // newList.lists.splice(id[1], 0, ...list);
 
     newList.lists.forEach((element, index) => {
-      console.log(element)
       listsRef
         .child("lists")
         .child(String(element.id))

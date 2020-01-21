@@ -40,12 +40,18 @@ class TrelloCard extends React.Component<CardProps> {
   async componentDidMount() {
 
     const { getUserById, userId, users } = this.props;
-    console.log(this.props.isFavourite);
     let user: UserObject = await getUserById(userId, users);
     if (user) {
-      this.setState({ userAssigned: user.firstName + " " + user.lastName, currentUserId: userId, cardText: this.props.text, isFavourite: this.props.isFavourite });
+      this.setState({
+        userAssigned: user.firstName + " " + user.lastName,
+        currentUserId: userId, cardText: this.props.text,
+        isFavourite: this.props.isFavourite
+      });
     } else {
-      this.setState({ cardText: this.props.text, isFavourite: this.props.isFavourite });
+      this.setState({
+        cardText: this.props.text,
+        isFavourite: this.props.isFavourite
+      });
     }
 
   }
@@ -60,23 +66,36 @@ class TrelloCard extends React.Component<CardProps> {
       const { id, updateCardText } = this.props;
       await updateCardText(id, this.state.cardText);
     }
-    this.setState({ editModeEnabled: !this.state.editModeEnabled });
+    this.setState({
+      editModeEnabled:
+        !this.state.editModeEnabled
+    });
   }
 
   handleTextChange = (event: any) => {
-    this.setState({ cardText: event.target.value })
+    this.setState({
+      cardText:
+        event.target.value
+    })
   }
 
   handleChangeAssignedUser = (event: any, child: any) => {
     const { updateCardAssignedUser, id, listID } = this.props;
-    this.setState({ userAssigned: event.target.value, currentUserId: child.key }, () => {
+    this.setState({
+      userAssigned:
+        event.target.value,
+      currentUserId: child.key
+    }, () => {
       updateCardAssignedUser(id, child.key, listID);
     });
   }
 
   handleFavourite = () => {
     const { id, updateFavouriteStatus } = this.props;
-    this.setState({ isFavourite: !this.state.isFavourite }, () => {
+    this.setState({
+      isFavourite:
+        !this.state.isFavourite
+    }, () => {
       updateFavouriteStatus(id, this.state.isFavourite);
     })
 
@@ -94,20 +113,21 @@ class TrelloCard extends React.Component<CardProps> {
           >
             <Card className={this.state.isFavourite ? styles.cardContainerFavourite : styles.cardContainer}>
               <CardContent >
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Icon style={{ cursor: 'pointer', color: 'red' }}
+                <div className={styles.cardContentContainer}>
+                  <Icon className={styles.iconStyle}
                     onClick={() => this.deleteCard(this.props.id, this.props.listID)}>
                     close</Icon>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <div className={styles.inputContainer} style={{
-                    boxShadow: this.state.editModeEnabled ? "inset 0 0 1em #c0c0c0" : 'none',
-                    border: this.state.editModeEnabled ? "1px solid #c0c0c0" : 'none'
-                  }}>
-
+                <div className={styles.textContainer}>
+                  <div className={this.state.editModeEnabled ?
+                    styles.inputContainerEnabled :
+                    styles.inputContainerDisabled} 
+                  >
                     <textarea onChange={this.handleTextChange} value={this.state.cardText} disabled={!this.state.editModeEnabled}
-                      className={styles.textareaDescription}
-                      style={{ pointerEvents: this.state.editModeEnabled ? 'auto' : 'none' }}
+                      className={this.state.editModeEnabled ?
+                        styles.textareaDescriptionEnabled :
+                        styles.textareaDescriptionDisabled}
+                    
                     />
                     {/* Assigned: <a href={"/user/" + this.props.userId}> {this.state.userAssigned} </a> */}
 
@@ -121,19 +141,26 @@ class TrelloCard extends React.Component<CardProps> {
 
 
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div className={styles.assignedContainer}>
                   Assigned:
-                     {this.state.currentUserId && <Link to={{
+                     {
+                    this.state.currentUserId && <Link to={{
                     pathname: '/user/' + this.state.currentUserId
-                  }}> {this.state.userAssigned}</Link>}
+                    }}> {this.state.userAssigned}</Link>
+                  }
                   <FormControl >
                     <Select onChange={this.handleChangeAssignedUser} displayEmpty>
                       <MenuItem value="" disabled>
                         None
                         </MenuItem>
-                      {users.map((user, index) => {
+                      {
+                        users.map((user, index) => {
                         if (user.jobTitle) {
-                          return <MenuItem itemProp={user.id + ""} key={user.id} value={user.firstName + " " + user.lastName}> {user.firstName} {user.lastName} </MenuItem>
+                          return <MenuItem itemProp={user.id + ""}
+                            key={user.id}
+                            value={user.firstName + " " + user.lastName
+                            }> {user.firstName} {user.lastName}
+                          </MenuItem>
                         }
                       }
                       )}

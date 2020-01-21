@@ -1,4 +1,15 @@
-:local(.inputContainer) {
+:local(.inputContainerDisabled) {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  box-shadow: none;
+  border: none;
+  padding: 0 10px;
+  height: auto;
+  align-items: flex-start;
+}
+
+:local(.inputContainerEnabled) {
   display: flex;
   flex-direction: column;
   width: 70%;
@@ -26,7 +37,16 @@
   border-left: 3px solid red;
 }
 
-:local(.textareaDescription) {
+:local(.textareaDescriptionEnabled) {
+  resize: none;
+  width: 100%;
+  overflow: hidden;
+  outline: none;
+  border: none;
+  pointer-events: auto;
+}
+
+:local(.textareaDescriptionDisabled) {
   resize: none;
   width: 100%;
   overflow: hidden;
@@ -45,4 +65,27 @@
   justify-content: space-between;
   align-items: flex-end;
   margin-top: 10%;
+}
+
+:local(.cardContentContainer){
+ display: flex;
+ justify-content: flex-end;
+}
+
+:local(.iconStyle){
+ cursor: pointer;
+ color: red;
+}
+
+:local(.textContainer){
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+:local(.assignedContainer){
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
 }

@@ -18,7 +18,6 @@ const TrelloList = ({ listID, title, cards, users, index,filter }: { listID: num
                 <h4>{title}</h4>
 
                 {cards.map((card, index) => {
-                  console.log(filter)
                   if (filter == card.userId || filter == undefined) {
                     return <TrelloCard key={card.id}
                       index={index}

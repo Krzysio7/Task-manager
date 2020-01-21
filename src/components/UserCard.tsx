@@ -46,24 +46,29 @@ class UserCard extends React.Component<UserCardProps & RouteComponentProps<TRout
   }
   async componentDidMount() {
     const { getUserById, lists } = this.props;
-    // const {user} = this.props.location.state;
 
     if (this.props.users.length > 0 && lists) {
-      this.setState({ user: await getUserById(parseInt(this.props.match.params.userId), this.props.users) });
+      this.setState({
+        user: await getUserById(parseInt(this.props.match.params.userId),
+          this.props.users)
+      });
 
     } else {
       const { fetchUsers, fetchData } = this.props;
 
       await fetchUsers();
       await fetchData();
-      this.setState({ user: await getUserById(parseInt(this.props.match.params.userId), this.props.users) });
+      this.setState({
+        user: await getUserById(parseInt(this.props.match.params.userId),
+          this.props.users)
+      });
     }
   }
 
   render() {
     const { user } = this.state;
     const { lists } = this.props;
-console.log(lists)
+  
     let position: {
       lat: number
       lng: number
@@ -74,10 +79,10 @@ console.log(lists)
     };
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }} >
-        <div style={{ display: 'flex', flexDirection: 'row' }} >
-          <Card style={{ display: 'flex', width: '25%' }}>
-            <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+      <div className={styles.mainContainer}>
+        <div className={styles.innerCardContainer} >
+          <Card className={styles.cardContainer}>
+            <CardContent className={styles.cardContentStyle}>
               <text className={styles.userText}><span className={styles.bold}>First Name:</span> {user.firstName}</text>
               <text className={styles.userText}><span className={styles.bold}>Last Name:</span> {user.lastName}</text>
               <text className={styles.userText}><span className={styles.bold}>Email:</span> {user.email}</text>
@@ -90,8 +95,9 @@ console.log(lists)
             </CardContent>
 
           </Card>
-          <div style={{ flex: 1 }}>
-            {user.lat && <Map style={{ height: '100%' }} id="mapid" center={position} zoom={13}>
+          <div className={styles.mapContainerStyle}>
+            {
+              user.lat && <Map style={{ height: '100%' }} id="mapid" center={position} zoom={13}>
               <TileLayer
                 url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                 attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
@@ -102,10 +108,11 @@ console.log(lists)
                 </Popup>
               </Marker>
             </Map>
-            }</div>
+            }
+          </div>
 
         </div>
-        <div style={{display: 'flex', width: '25%', justifyContent:'center', flexDirection:'column', background:'green' }}>
+        <div className={styles.tasksContainer}>
         <h4>User tasks</h4>
           {
             lists.lists.map((list: ListObject, index) => {
@@ -114,11 +121,15 @@ console.log(lists)
 
                 if (card.userId + "" == this.props.match.params.userId) {
 
-                  return (<Card style={{ display: 'flex', width: '80%',margin:'5%', alignSelf:'center'}}>
-                    <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start',  flexWrap: 'wrap' }}>
-                      <text className={styles.userText}><span className={styles.bold}>Task name: </span> {card.text}</text>
+                  return (
+                    <Card className={styles.taskCardStyle}>
+                    <CardContent className={styles.taskCardContentStyle}>
+                        <text className={styles.userText}>
+                          <span className={styles.bold}>Task name: </span>
+                          {card.text}</text>
                     </CardContent>
-                  </Card>)
+                    </Card>
+                  )
                 }
               })
             })
